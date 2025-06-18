@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="fr">
+<meta charset="UTF-8">
+<meta viewport" content="width=device-width, initial-scale=1.0" />
+
+<meta name="description" content="decouvre des blagues hilarantes à lire, voter et partager. Ajoute même les tiennes ! 😁">
+<meta name="keywords" content="blague, humour,drôle, rigolo, blague marrante, site humour">
+<meta name="author" content="tonPseudo">
+
+
+<meta property="og:title" content="🤣 Blagues trés drôles à decouvrir et voter !"/ >
+<meta property="og:description" content="lis, ris, vote pour les meilleurs blague, ou propose la tienne !😃"/>
+<meta property="og:image" content=">
+<meta property="og:url" content=">
+<meta property="og:type" content="website"/>
+
+<title>jeu du jour</title>
+<style>
+  body{
+    background-color: #0b1c2c;
+    color:white;
+    font-family:'Comic Sans MS', cursive;
+    text-align: center;
+    padding:20px;
+  }
+
+  h1{
+   color:#ffdd57;
+  }
+
+  .blagues{
+    display: flex;
+    justify-content: center;
+    gap:30px;
+    margin-top: 30px;
+  }
+
+  .blague{
+    background:#1a2d45;
+    padding: 20px;
+    border-raduis:10px;
+    width:40%;
+    cursor:pointer;
+    transition: transform 0.2s;
+  }
+
+  .blague:hover{
+    transform: scale(1.03);
+    box-shadow: 0 0 10px #ffdd57;
+  }
+
+  .avatar{
+    width:40px;
+    height:40px;
+    border-raduis:50%;
+    margin-bottom:10px;
+  }
+
+  .pseudo{
+    font-weight:bold;
+    display: block;
+    color:#7df9ff;
+    margin-top:5px;
+  }
+
+  #resultat{
+    margin-top:20px;
+    font-size:18px;
+    color: #00ff88;
+  }
+
+  a {
+    display: inline-block;
+    margin-top: 30px;
+    color: #7df9ff;
+    text-decoration: none;
+  }
+
+</style>
+</head>
+
+<header>
+<div id="langue-switch" style="text-align:right; padding:10px," >
+<select onchange="changeLangueGlobale(this.value)">
+<option value="fr"> FRANÇAIS</option>
+<option value="fr"> ENGLISH</option>
+</select>
+</div>
+</header>
+
+
+<body>
+
+<nav>
+<a id="nav-accueil" href="index.html"></a>
+<a id="nav-blague" href="blague.html"></a>
+<a id="nav-roiDuJour" href="roi-du-jour.html"></a>
+<a id="nav-classement" href="roi.html"></a>
+<a id="nav-jeuDuJour" href="jeu-du-jour.html"></a>
+<a id="nav-contact" href="contact.html"></a>
+
+</nav>
+
+<h1>🎯Duel des blagues du jour</h1>
+<p>vote pour la plus drôle</p>
+
+<div class="balgues" id="blagues"></div>
+<div id="resultat"></div>
+<a href="index.html">🔙Retour à l'Acceuil</a>
+
+
+
+<script>
+
+const blague=JSON.parse(localStorage.getItem("blagues-proposées")||"[]");
+const votes=JSON.parse(localStorage.getItem("votes-blagues")||"{}");
+
+const blaguesZone=document.getElementById("blague");
+const resultatZone=document.getElementById("resultat");
+
+const todayKey=new Date().toISOString().split('T')[0];
+const voteKey="vote-du-jour-"+todayKey;
+let b1, b2;
+
+function initBlagueDuJour(){
+let rng=math.seedrandom(todayKey);
+if(blagues.length < 2){
+blaguesZone.innerHTML="<p>pas assez de blagues enregistrées.</p>";
+return;
+}
+
+const indices=[...Array(blagues.length).keys()];
+for(let i = indices.length - 1; i > 0; i--){
+let j=math.floor(rng()*(i+1);
+[indices[i], indices[j]]=[indices[j],indices[i]];
+}
+
+b1 = blagues[indices[0]];
+b2 = blagues[indices[1]];
+
+blaguesZone.innerHTML=`
+<div class="blague" onclick="voter(${indices[0]})">
+<img class="avatar" src="https://api.dicebear.com/7.x/thumbs/svg?seed=${b1.nom}" alt="avatar">
+<span class="pseudo">${b1.nom}</span>
+<p>${b1.message}</p>
+</div>
+<img class="avatar" src="https://api.dicebear.com/7.x/thumbs/svg?seed=${b2.nom}" alt="avatar">
+<span class="pseudo">${b2.nom}</span>
+<p>${b2.message}</p>
+</div>
+`;
+}
+
+ 
+function voter(index){
+if (localStorage.getItem(voteKey)){
+resultatZone.innerHTML="✅tu as déjà voté aujourd'hui !";
+return;
+ }
+
+votes[index]=(votes[index]||0)+1;
+localStorage.setItem("votes-blagues",JSON.stringify(votes));
+localStorage.setItem(voteKey,index);
+resultatZone.innerHTMl="🎉merci pour ton vote ! reviens demain !";
+
+
+const gagnant = blagues[index];
+const roiDuJour= JSON.parse(localStorage.getItem("rois-du-jour")||"[]");
+roiDuJour.push({
+date: todayKey,
+nom:gagnant.nom,
+message:gagnant.message
+});
+localStorage.setItem("rois-du-jour",JSON.stringify(roiDuJour));
+}
+
+
+
+
+
+(function(a,b,c,d,e,f,g,h,i){function q(b){var c,d=b.length,e=this,f=0,g=e.i=e.j=0,h=e.s=[];for(d||(b=[d++]);f<256;)h[f]=f++;for(f=0;f<256;)h[f]h[g=255&(g+b[f%d]+(c=h[f]))],h[g]=c;}function r(var d,e=[];f=typeof b;if(c&&f=="object")for(d in d)try{e.push(r(b[d],c-1))}catch(g){}return e.length?e:"string"==f?b:b+"\0"}function s(a,b){var c,d=[],e=typeof a;if(b&&==object")for(c in a)try{d.push(s(a[c],b-1))}catch(f){}return d.length?d:"string"==e?a:a+"\0"}function t(a,b){for(var c,d=a+"",e=0;e<d.length;)b[255&(c^=19*b[e++])]=c;return u(b)}function u(b){function (){var a,c=0,d=b.length,e=0;for(;e<d;)c=256*c+b[e++];return(c>>>0)/4294967296}}function v(){return u(math.floor(256*math.random())]}c.seedrandom=function(a,b){var e=[],g=a===(0|a)?[a]:r(a+"",3),h=t(s(b?g.concat(r(b,3)):g,3),e);return h()},d.exports=c.seedrandom})(this,"object"==typeof module&&module,"random");
+
+
+
+const traductionGlobales={
+fr:{
+
+accueil: "Accueil",
+contact:"Contact",
+blagues:"Blague",
+roi:"Roi del'humour",
+envoyer:"Envoyer",
+pseudo:"Ton Pseudo",
+blague:"Ta blague",
+votes:"Vote(s)",
+voter:"Voter",
+soumission:"Soumis le"
+},
+
+en:{
+
+acceuil:"Home",
+contact:"Contact",
+blagues:"Jokes",
+roi:"King of Humor",
+envoyer:"Submit",
+pseudo:"Your nickname",
+blague:"Your joke",
+votes:"Vote(s)",
+voter:"Vote",
+soumission:"submitted on "
+}
+};
+
+function changeLangueGlobale(langue){
+localStorage.setItem("langue", langue);
+location.reload();
+}
+
+function langueActuelle(){
+return localStorage.getItem("langue")|| "fr";
+}
+
+document.getElementById("nav-accueil").textContent = traductionGlobales[langueActuelle()].accueil;
+
+document.getElementById("nav-blague").textContent = traductionGlobales[langueActuelle()].blague;
+
+document.getElementById("nav-contact").textContent = traductionGlobales[langueActuelle()].contact;
+
+document.getElementById("nav-roiDuJour").textContent = traductionGlobales[langueActuelle()].roiDuJour;
+
+document.getElementById("nav-jeuDuJour").textContent = traductionGlobales[langueActuelle()].jeuDuJour;
+
+document.getElementById("nav-classement").textContent = traductionGlobales[langueActuelle()].classement;
+
+
+<script>
+
+</body>
+</html>

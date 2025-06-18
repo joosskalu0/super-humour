@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<meta name="description" content="decouvre des blagues hilarantes à lire, voter et partager. Ajoute même les tiennes ! 😁">
+<meta name="keywords" content="blague, humour,drôle, rigolo, blague marrante, site humour">
+<meta name="author" content="tonPseudo">
+
+
+<meta property="og:title" content="🤣 Blagues trés drôles à decouvrir et voter !"/ >
+<meta property="og:description" content="lis, ris, vote pour les meilleurs blague, ou propose la tienne !😃"/>
+<meta property="og:image" content=">
+<meta property="og:url" content=">
+<meta property="og:type" content="website"/>
+
+<title>Blagues à mourir de joie</title>
+<style>
+  body {
+    background-color:#0b1c2c;
+    color:white;
+    font-family: 'Comic Sans MS', cursive;
+    padding:20px;
+    
+  }
+  header{
+    background-color:#ff6f61
+    color: yellow;
+    padding; 2rem;
+    text-align: center;
+  }
+  h1 {
+    text-align: center;
+    colo:#ffdd57;
+  }
+
+
+  .blague {
+     banckgroubd-color: #1a2d45;
+     border-raduis: 10px;
+     padding: 15px;
+     margin: 15px auto;
+     box-shadow: 0 0 10px #222;
+  }
+  
+  
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+    boder-raduis: 50%;
+    vertical-align: middle;
+    margin-right: 10px
+  }
+
+  .stars {
+    cursor: pointer;
+    font-size: 1.2em;
+    margin-top: 5px;
+  }
+
+  .pseudo {
+    font-weight: bold;
+    
+
+  
+  button.star-button {
+    background: none;
+    border: none;
+    font-size:1.2rem;
+    cursor: pointer;
+    transition: trasform 0.3s ease;
+  }
+
+  button.star-button:hover {
+    transform: scale(1.3);
+    color: #ffdd54;
+  }
+ 
+  button.star-button.animate{
+    animation:pop 0.5s ease;
+  }
+
+  @keyframes pop{
+    0%{transform: scale(1);}
+    50%{transform: scale(1.8) rotate(20deg);}
+    100%{transform: scale(1);}
+  }
+
+  .score{
+    margin-left:10px;
+    font-weight: bold;
+    color: #ffdd57;
+  }
+
+ 
+  .footer {
+    text-align: center;
+    padding: 1rem;
+    background-color: #ffd166;
+    font-size: 0.9rem;
+  }
+</style>
+</head>
+
+<header>
+<div id="langue-switch" style="text-align:right; padding:10px," >
+<select onchange="changeLangueGlobale(this.value)">
+<option value="fr"> FRANÇAIS</option>
+<option value="fr"> ENGLISH</option>
+</select>
+</div>
+</header>
+
+
+<body>
+
+<nav>
+<a id="nav-accueil" href="index.html"></a>
+<a id="nav-blague" href="blague.html"></a>
+<a id="nav-roiDuJour" href="roi-du-jour.html"></a>
+<a id="nav-classement" href="roi.html"></a>
+<a id="nav-jeuDuJour" href="jeu-du-jour.html"></a>
+<a id="nav-contact" href="contact.html"></a>
+</nav>
+
+
+<nav class="menu">
+<a href="index.html">🏘 Accueil</a>
+<a href="blague.html">😀blagues</a>
+<a href="roi.html">👑classement</a>
+<a href="jeu-du-jour.html">🎯jeu du jour</a>
+<a href="contact.html">📤envoyé</a>
+<a href="roi-du-jour.html">🏆roi du jour</a>
+</nav>
+
+<h1>🤣Les meilleures blagues </h1>
+<div id="liste-blagues"></div>
+
+
+
+
+<script>
+
+  const conteneur = document.getElementById("liste-blague");
+  const blagues = JSON.parse(localStorage.getItem("blague-proposées")||"[]");
+  const votes =JSON.parse(localStorage.getItem("votes-blagues")||"{}");
+  blagues.forEach(i =>{
+    if(votes[i]=== underfined) votes[i] =0;
+  });
+ 
+  const indexTrie = [...blagues.keys()].sort((a, b)=>(votes[b]|| 0) - (votes[a] || 0));
+
+  indexTrie.forEach(i=>{
+    const b = blagues[i];
+    const bloc = document.createElement("div");
+    bloc.className="blague";
+    bloc.innerHTML=`
+<img class="avatar" src="https://api.dicebear.com/7.x/thumbs/svg?seed=${b.nom}" alt="avatar">
+<span class="pseudo">${b.nom}</span><br>
+$b.message}<br>
+<div class="stars">
+<buton class="star-button" onclick="voter(${i}, this)">⭐</button>
+<span class="score" id="score-${i}">${votes[i]}</span>
+</div>
+`;
+conteneur.appendchild(bloc);
+});
+ 
+
+function voter(index, bouton) {
+
+  const votes=JSON.parse(localStorage.getItem("votes-blagues")||"{}");
+  votes[index]= (votes[index]||0) +1;
+  localStorage.setItem("votes_blagues", JSON.stringify(votes));
+  document.getElementById(`score-${index}`).textcontent = votes[index];
+
+  bouton.classList.add("animate");
+  setTimeout(() => bouton.classList.remove("animate"),500);
+  }
+ 
+
+
+
+const traductionGlobales={
+fr:{
+
+accueil: "Accueil",
+contact:"Contact",
+blagues:"Blague",
+roi:"Roi del'humour",
+envoyer:"Envoyer",
+pseudo:"Ton Pseudo",
+blague:"Ta blague",
+votes:"Vote(s)",
+voter:"Voter",
+soumission:"Soumis le"
+},
+
+en:{
+
+acceuil:"Home",
+contact:"Contact",
+blagues:"Jokes",
+roi:"King of Humor",
+envoyer:"Submit",
+pseudo:"Your nickname",
+blague:"Your joke",
+votes:"Vote(s)",
+voter:"Vote",
+soumission:"submitted on "
+}
+};
+
+function changeLangueGlobale(langue){
+localStorage.setItem("langue", langue);
+location.reload();
+}
+
+function langueActuelle(){
+return localStorage.getItem("langue")|| "fr";
+}
+
+document.getElementById("nav-accueil").textContent = traductionGlobales[langueActuelle()].accueil;
+
+document.getElementById("nav-blague").textContent = traductionGlobales[langueActuelle()].blague;
+
+document.getElementById("nav-contact").textContent = traductionGlobales[langueActuelle()].contact;
+
+document.getElementById("nav-roiDuJour").textContent = traductionGlobales[langueActuelle()].roiDuJour;
+
+document.getElementById("nav-jeuDuJour").textContent = traductionGlobales[langueActuelle()].jeuDuJour;
+
+document.getElementById("nav-classement").textContent = traductionGlobales[langueActuelle()].classement;
+
+
+
+</script>
+
+
+
+
+
+
+</body>
+</html>

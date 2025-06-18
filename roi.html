@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<meta name="description" content="decouvre des blagues hilarantes à lire, voter et partager. Ajoute même les tiennes ! 😁">
+<meta name="keywords" content="blague, humour,drôle, rigolo, blague marrante, site humour">
+<meta name="author" content="tonPseudo">
+
+
+<meta property="og:title" content="🤣 Blagues trés drôles à decouvrir et voter !"/ >
+<meta property="og:description" content="lis, ris, vote pour les meilleurs blague, ou propose la tienne !😃"/>
+<meta property="og:image" content=">
+<meta property="og:url" content=">
+<meta property="og:type" content="website"/>
+
+<title>👑 Roi de l'humour</title>
+<style>
+   body{
+     background-color: #0b1c2c;
+     color: white;
+     font-family:'Comic Sans MS' cursive, sans-serif;
+     panding: 20px;
+   }
+
+   h1, h2, h3{
+     text-align: center;
+     color: #ffdd57;
+   }
+
+   .section {
+     width:90%;
+     max-width:800px;
+     margin:auto;
+     margin-bottom;
+  }
+   
+   .blague, .blagueur{
+     background-color:#1a2d45;
+     margin: 10px auto;
+     padding: 15px;
+     border-raduis:10px;
+     max-width:600px;
+     box-shadow: 0 0 10px #222;
+   }
+
+   .avatar{
+     width:40px;
+     height:40px;
+     border-raduis:50%;
+     vertical-align: middle;
+     margin-right: 10px;
+   }
+
+   pseudo{
+    font-weight: bold;
+
+  .badge{
+    display: inline-block;
+    background-color:#ffd700;
+    color: black;
+    padding:2px 6px;
+    margin-left: 6px;
+    margin-raduis:10px;
+    font-size: 1.2em;
+   
+  }
+  
+  buttom{
+    display: block;
+    margin:30px auto;
+    padding: 10px 20px;
+    background-color: #ffdd57;
+    border: none;
+    border-raduis: 5px;
+    color: #000;
+    font-weight:bold;
+    cursor:pointer;
+  }
+</style>
+</head>
+
+<header>
+<div id="langue-switch" style="text-align:right; padding:10px," >
+<select onchange="changeLangueGlobale(this.value)">
+<option value="fr"> FRANÇAIS</option>
+<option value="fr"> ENGLISH</option>
+</select>
+</div>
+</header>
+
+<body>
+
+
+<nav>
+<a id="nav-accueil" href="index.html"></a>
+<a id="nav-blague" href="blague.html"></a>
+<a id="nav-roiDuJour" href="roi-du-jour.html"></a>
+<a id="nav-classement" href="roi.html"></a>
+<a id="nav-jeuDuJour" href="jeu-du-jour.html"></a>
+<a id="nav-contact" href="contact.html"></a>
+
+</nav>
+
+<h1>👑 le Roi de l'humour</h1>
+
+
+
+<div class="section">
+<h2>🏆classement des  blagues </h2>
+<div id ="top-semaine"></div>
+</div>
+
+<div class="section">
+<h2>🌟Top blagues de la semaine</h2>
+<div id ="classement-blagues"></div>
+</div>
+
+<div class="section">
+<h2>🥇classement des blagueurs</h2>
+<div id ="classement-blagueur"></div>
+</div>
+
+<button onclick=" window.location.href='index.html'">🔙Retour à l'accueil</button>
+
+<script>
+
+window.addEventListener("DOMCntentLoaded", ()=>{
+const blagues = JSON.parse(localStorage.getItem("blagues")|| "[]");
+const rois = JSON.parse(localStorage.getItem("rois-du-jour")|| "{}");
+
+const stats ={};
+rois.forEach(roi=>{
+stats[roi.nom]= (stats[roi.nom]||0)+1;
+});
+
+function getBadge(pseudo){
+const nb= stats[pseudo]||0;
+if(nb >=5) return"🏆Légende";
+if(nb >=3) return"⭐Étoilé";
+if(nb >=2) return"🏅 Double";
+return"";
+}
+
+
+const classementDiv= document.getElementById("classement-blagues");
+if(classementDiv){
+blagues.sort((a,b)=> b.votes - a.votes).forEach(blague=>{
+const badge= getBadge(blague.nom);
+classementDiv.innerHTML+= `
+<div class="blague">
+<div class="pseudo">${blague.nom}${badge ? `<span class="badge">${badge}</span>`:""}</div>
+<p>${blague.message}</p>
+<div class="vote">⭐${blague.votes}</div>
+</div>`;
+});
+}
+ 
+const topSemaineDiv= document.getElementById("top-semaine");
+if(topSemaineDiv){
+const uneSemaine = 7 * 24 *60 * 60 * 1000;
+const maintenant = Date.now();
+const recentes =blagues
+.filter(b=>timestamp &&(maintenant - b.timestamp)< uneSemaine)
+.sort((a,b)=>b.votes - a.votes)
+.slice(0,5);
+if(recentes.length===0){
+topSemaineDiv.innerHTML="<p>Aucune blague recente cette semaine</p>";
+}
+
+else{
+recentes.forEach(blague=>{
+const badge= getBadge(blague.nom);
+topSemaineDiv.innerHTML+= `
+<div class="blague">.
+<div class="pseudo">${blague.nom}${badge ? ` <span class="badge">${badge}</span>`:""}</div>
+<p>${blague.message}</p>
+<div class="vote">⭐$'blague.votes}</div>
+</div>
+ `;
+});
+}
+}
+
+
+const classementBlagueursDiv = document.getElementById("classement-blagueurs");
+if(classementBlagueursDiv){
+const scoreBlagueurs={};
+blagueurs.forEach(b=>{
+scoreBlagueurs[b.nom]= (scoreBlagueurs[b.nom]||0)+b.votes;
+});
+
+const topBlagueurs = Object.entries(scoreBlagueurs)
+.sort(([, a],[,b])=>b -a)
+.slice(0, 10);
+
+topBlagueurs.forEach(([pseudo, totalVotes])=>{
+const badge= getBadge(pseudo);
+classementBlagueursDiv.innerHTML+=`
+<div class="blagueur">
+<div class="pseudo">${pseudo}${badge ? `<span class="badge">${badge}</span>`:""}</div>
+<div class="vote">total des votes : ⭐${totalVotes}</div>
+</div>
+`;
+})
+}
+});
+
+
+
+
+
+const traductionGlobales={
+fr:{
+
+accueil: "Accueil",
+contact:"Contact",
+blagues:"Blague",
+roi:"Roi del'humour",
+envoyer:"Envoyer",
+pseudo:"Ton Pseudo",
+blague:"Ta blague",
+votes:"Vote(s)",
+voter:"Voter",
+soumission:"Soumis le"
+},
+
+en:{
+
+acceuil:"Home",
+contact:"Contact",
+blagues:"Jokes",
+roi:"King of Humor",
+envoyer:"Submit",
+pseudo:"Your nickname",
+blague:"Your joke",
+votes:"Vote(s)",
+voter:"Vote",
+soumission:"submitted on "
+}
+};
+
+function changeLangueGlobale(langue){
+localStorage.setItem("langue", langue);
+location.reload();
+}
+
+function langueActuelle(){
+return localStorage.getItem("langue")|| "fr";
+}
+
+document.getElementById("nav-accueil").textContent = traductionGlobales[langueActuelle()].accueil;
+
+document.getElementById("nav-blague").textContent = traductionGlobales[langueActuelle()].blague;
+
+document.getElementById("nav-contact").textContent = traductionGlobales[langueActuelle()].contact;
+
+document.getElementById("nav-roiDuJour").textContent = traductionGlobales[langueActuelle()].roiDuJour;
+
+document.getElementById("nav-jeuDuJour").textContent = traductionGlobales[langueActuelle()].jeuDuJour;
+
+document.getElementById("nav-classement").textContent = traductionGlobales[langueActuelle()].classement;
+</script>
+
+
+
+
+
+
+</body>
+</html>
+
+    

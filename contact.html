@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="decouvre des blagues hilarantes à lire, voter et partager. Ajoute même les tiennes ! 😁">
+<meta name="keywords" content="blague, humour,drôle, rigolo, blague marrante, site humour">
+<meta name="author" content="tonPseudo">
+
+
+<meta property="og:title" content="🤣 Blagues trés drôles à decouvrir et voter !"/ >
+<meta property="og:description" content="lis, ris, vote pour les meilleurs blague, ou propose la tienne !😃"/>
+<meta property="og:image" content=">
+<meta property="og:url" content=">
+<meta property="og:type" content="website"/>
+
+
+
+
+
+
+<title>Blagues très drôles</title>
+<style>
+  body {
+   background-color: #001f3f;
+   color:white;
+   font-family:'Comic Sans MS', sans-serif;
+   padding:30px;
+  }
+
+
+
+
+  .menu{
+    backgroung-color: #0f2537;
+    display: flex;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px;
+    padding:10px;
+    border-bottom:2px solid gold;
+    position:sticky;
+    top:0;
+    z-index:999;
+
+  .menu a{
+    color:white;
+    text-decoration:none;
+    background-color:#1c3d5a;
+    padding: 8px;
+    border-raduis:20px;
+    font-weight:bold;
+    transistion:0.3s;
+  }
+
+  .menu a:hover{
+    background-color: gold;
+    color:#0f2537;
+  }
+
+  h1 {
+   text-align: center;
+   color: #00c3ff;
+   text-shadow: 0 0 10px #0ff;
+  }
+
+nav {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  nav a{
+    margin: 0 10px;
+    text-decoration: none;
+    color: #ff5722;
+    font-weight: bold;
+  }
+
+  form{
+    max-widht: 600px;
+    margin: auto;
+    background: #002c5a;
+    padding: 20px;
+    border-raduis: 10px;
+    box-shadow:0 0 15px rgba(0, 255, 255, 0.2);
+  }
+
+  label{
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+  }
+
+  input, textarea{
+    width:100%;
+    padding:10px;
+    border-raduis: 5px;
+    border: none;
+    margin-top: 5px;
+    font-family: inherit;
+  }
+
+  button{
+    margin-top: 20px;
+    padding: 10px 20px;
+    background: #00c3ff;
+    border: none;
+    color: black;
+    font-weight: bold;
+    border-raduis: 8px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+
+  button:hover {
+    transform: scale(1.1);
+    background-color: #66e0ff;
+  }
+
+  .confirmation{
+    text-align: center;
+    margin-top:20px;
+    font-size: 1.1em;
+    color:#00ffcc;
+    display: none;
+  }
+
+  .liste-blague{
+    max-width: 600px;
+    margin: 40px;
+    background: #001b33;
+    padding: 20px;
+    border-raduis:10px;
+  }
+
+  .blague-proposer{
+    background:  #003c66;
+    padding: 10px;
+    border-raduis:6px
+    margin-bottom: 10px;
+  }
+
+  .blague-proposer span{
+    font-weight: bold;
+    color: #00eaff;
+  }
+
+</style>
+</head>
+
+<header>
+<div id="langue-switch" style="text-align:right; padding:10px," >
+<select onchange="changeLangueGlobale(this.value)">
+<option value="fr"> FRANÇAIS</option>
+<option value="fr"> ENGLISH</option>
+</select>
+</div>
+</header>
+
+<body>
+
+
+<nav>
+<a id="nav-accueil" href="index.html"></a>
+<a id="nav-blague" href="blague.html"></a>
+<a id="nav-roiDuJour" href="roi-du-jour.html"></a>
+<a id="nav-classement" href="roi.html"></a>
+<a id="nav-jeuDuJour" href="jeu-du-jour.html"></a>
+<a id="nav-contact" href="contact.html"></a>
+
+</nav>
+
+
+<nav class="menu">
+<a href="index.html">🏘 Accueil</a>
+<a href="blague.html">😀blagues</a>
+<a href="roi.html">👑classement</a>
+<a href="jeu-du-jour.html">jeu du jour</a>
+<a href="contact.html">contact</a>
+</nav>
+
+<h1>propose une blague drôle !</h1>
+
+<form onsubmit="envoyer(event)">
+<label for="nom">ton nom ou pseudo</label>
+<input type="text" id="nom" required />
+
+<label for="message">ta blague :</label>
+<textarea id="message" rows="4" required /></textarea>
+
+<button type="submit">Envoyer la blague</button>
+
+<div class="confirmation" id="confirmation">
+merci ! ta blague est ajoutée à la collection !
+</div>
+</form>
+
+<div class="liste-blague" id="liste">
+<h2>Blagues proposées : </h2>
+</div>
+
+<script>
+const formulaire = document.querySelector("form");
+
+formulaire.addEventListener("submit", function(e){
+e.preventDefault();
+const nom = document.getElementById("nom").value.trim();
+const message = document.getElementById("message").value.trim();
+
+if(!message){
+alert("merci d'ecrire une blague😀");
+}
+
+const dateSoumission= new Date().toISOString()
+const nouvelleBlague= {
+nom: nom || "Anonyme",
+message: message,
+date: dateSoumission
+};
+
+const blagues = JSON.parse(localStorage.getItem("blague-proposées")||"[]");
+blagues.push(nouvelleBlague);
+localStorage.setItem("blagues-propesées", JSON.stringify(blagues));
+
+alert("Ta blague a été enregistrée 🎉 merci !");
+formulaire.reset();
+});
+
+function getBlagues(){
+return JSON.parse(localStorage.getItem("blagues-proposees")|| "[]");
+}
+
+
+function afficherBlagues(){
+const blagues=getBlagues();
+const zone=liste.querySelector("h2");
+liste.innerHTML="<h2>📄 Blague proposées: </h2>";
+
+if (blagues.length ===0){
+liste.innerHTML +="<p>aucune blague encore. sois le premier!</p>";
+return;
+}
+
+blagues.forEach(({nom, message})=>{
+const div = document.createElement("div");
+div.className="blague-proposée";
+div.innerHTML= `<span>${nom} :</span>${message}`;
+liste.appendChild(div);
+});
+}
+
+
+function envoyer(event){
+event.preventDefault();
+const nom=document.getElementById("nom").value.trim();
+const message=document.getElementById("message").value.trim();
+}
+window.oneload= afficherBlagues();
+
+
+const traductionGlobales={
+fr:{
+
+accueil: "Accueil",
+contact:"Contact",
+blagues:"Blague",
+roi:"Roi del'humour",
+envoyer:"Envoyer",
+pseudo:"Ton Pseudo",
+blague:"Ta blague",
+votes:"Vote(s)",
+voter:"Voter",
+soumission:"Soumis le"
+},
+
+en:{
+
+acceuil:"Home",
+contact:"Contact",
+blagues:"Jokes",
+roi:"King of Humor",
+envoyer:"Submit",
+pseudo:"Your nickname",
+blague:"Your joke",
+votes:"Vote(s)",
+voter:"Vote",
+soumission:"submitted on "
+}
+};
+
+function changeLangueGlobale(langue){
+localStorage.setItem("langue", langue);
+location.reload();
+}
+
+function langueActuelle(){
+return localStorage.getItem("langue")|| "fr";
+}
+
+document.getElementById("nav-accueil").textContent = traductionGlobales[langueActuelle()].accueil;
+
+document.getElementById("nav-blague").textContent = traductionGlobales[langueActuelle()].blague;
+
+document.getElementById("nav-contact").textContent = traductionGlobales[langueActuelle()].contact;
+
+document.getElementById("nav-roiDuJour").textContent = traductionGlobales[langueActuelle()].roiDuJour;
+
+document.getElementById("nav-jeuDuJour").textContent = traductionGlobales[langueActuelle()].jeuDuJour;
+
+document.getElementById("nav-classement").textContent = traductionGlobales[langueActuelle()].classement;
+
+
+
+
+
+
+
+</script>
+
+
+
+
+
+
+</body>
+</html>
+   
