@@ -143,8 +143,8 @@
 
 <script>
 
-  const conteneur = document.getElementById("liste-blague");
-  const blagues = JSON.parse(localStorage.getItem("blague-proposées")||"[]");
+  const conteneur = document.getElementById("liste-blagues");
+  const blagues = JSON.parse(localStorage.getItem("blagues-proposées")||"[]");
   const votes =JSON.parse(localStorage.getItem("votes-blagues")||"{}");
   blagues.forEach(i =>{
     if(votes[i]=== underfined) votes[i] =0;
