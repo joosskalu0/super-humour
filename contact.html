@@ -218,6 +218,7 @@ message: message,
 date: dateSoumission
 };
 
+
 const blagues = JSON.parse(localStorage.getItem("blague-proposées")||"[]");
 blagues.push(nouvelleBlague);
 localStorage.setItem("blagues-propesées", JSON.stringify(blagues));
@@ -254,8 +255,16 @@ function envoyer(event){
 event.preventDefault();
 const nom=document.getElementById("nom").value.trim();
 const message=document.getElementById("message").value.trim();
+
+if (nom && message) {
+confirmation.style.display ="block";
+setTimeout(()=> confirmation.style.display="none",3000);
+document.getElementById("nom").value="";
+document.getElementById("message").value="";
+afficherBlagues();
 }
-window.oneload= afficherBlagues();
+}
+ afficherBlagues();
 
 
 const traductionGlobales={
